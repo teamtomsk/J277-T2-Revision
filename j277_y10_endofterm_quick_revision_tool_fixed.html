@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>OCR J277 Year 10 – Quick Programming Revision (20–25 mins)</title>
+<style>
+  :root{
+    --bg:#0b0f14;
+    --text:#e8eef7;
+    --muted:#a9b7cc;
+    --accent:#27c26a;
+    --accent2:#4adf86;
+    --warn:#ffcc00;
+    --bad:#ff5c77;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    --r:16px;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:var(--sans); color:var(--text);
+    background:radial-gradient(1200px 800px at 20% 10%, rgba(39,194,106,.16), transparent 60%),
+    radial-gradient(900px 700px at 90% 20%, rgba(74,223,134,.11), transparent 55%),
+    linear-gradient(180deg, #070a0f 0%, #0b0f14 100%);
+    min-height:100vh;
+  }
+  header{
+    position:sticky; top:0; z-index:10;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(11,15,20,.92), rgba(11,15,20,.70));
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .wrap{max-width:1150px; margin:0 auto; padding:18px 18px;}
+  .titleRow{display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+  .brand{display:flex; gap:12px; align-items:center;}
+  .pill{
+    width:44px; height:44px; border-radius:12px;
+    background:linear-gradient(135deg, rgba(39,194,106,.25), rgba(74,223,134,.08));
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: var(--shadow);
+    display:grid; place-items:center;
+    font-weight:900; color:var(--accent2);
+  }
+  h1{margin:0; font-size:20px;}
+  .sub{margin:2px 0 0; color:var(--muted); font-size:13px;}
+  .controls{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  button, .toggle{
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    padding:10px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.15s ease;
+    font-weight:650;
+  }
+  button:hover{transform:translateY(-1px); background:rgba(255,255,255,.08)}
+  button:active{transform:translateY(0px)}
+  .toggle{display:flex; gap:10px; align-items:center;}
+  .toggle input{width:18px; height:18px; accent-color:var(--accent)}
+  main{padding:18px 0 60px;}
+  .grid{display:grid; grid-template-columns: 330px 1fr; gap:16px;}
+  @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+  nav{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--r);
+    box-shadow: var(--shadow);
+    padding:14px;
+  }
+  .navTitle{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;}
+  .navTitle h2{margin:0; font-size:14px; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.12em;}
+  .navList{display:flex; flex-direction:column; gap:6px;}
+  .navItem{
+    padding:10px 10px; border-radius:12px; cursor:pointer;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.03);
+    display:flex; align-items:center; gap:10px;
+  }
+  .navItem:hover{background:rgba(255,255,255,.06)}
+  .dot{width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,.25)}
+  .navItem.active .dot{background:var(--accent)}
+  .navItem.active{border-color: rgba(39,194,106,.55); background:rgba(39,194,106,.10)}
+  section.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--r);
+    box-shadow: var(--shadow);
+    padding:18px;
+  }
+  .kicker{
+    display:inline-flex; gap:8px; align-items:center;
+    background:rgba(39,194,106,.12);
+    border:1px solid rgba(39,194,106,.35);
+    color:var(--accent2);
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    margin-bottom:10px;
+  }
+  h3{margin:8px 0 8px; font-size:20px;}
+  p{color:var(--muted); line-height:1.55; margin:8px 0 10px;}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start;}
+  .col{flex:1 1 280px;}
+  .panel{
+    background:rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:14px;
+  }
+  .panel h4{margin:0 0 8px; font-size:14px;}
+  .hint{font-size:13px; color:var(--muted)}
+  .badge{
+    display:inline-block; padding:4px 8px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.05);
+    color:var(--muted);
+    font-size:12px; font-weight:800;
+  }
+  .divider{height:1px; background:rgba(255,255,255,.08); margin:14px 0;}
+  textarea, input[type="text"], input[type="number"], select{
+    width:100%;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    padding:10px 12px;
+    outline:none;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  textarea{min-height:100px; resize:vertical}
+  .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+  .small{font-size:12px; color:var(--muted)}
+  .log{
+    white-space:pre-wrap; font-family:var(--mono);
+    background:#071018;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    padding:12px;
+    min-height:70px;
+    color:#d7e6ff;
+  }
+  .q{
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    padding:12px;
+    background:rgba(255,255,255,.03);
+    margin-top:10px;
+  }
+  .qTitle{font-weight:900; margin:0 0 6px;}
+  .choices{display:grid; gap:8px; margin-top:8px;}
+  .choice{
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.05);
+    padding:10px 10px;
+    border-radius:12px;
+    cursor:pointer;
+    user-select:none;
+    font-family:var(--sans);
+    font-weight:650;
+  }
+  .choice:hover{background:rgba(255,255,255,.08)}
+  .choice.correct{border-color: rgba(39,194,106,.65); background:rgba(39,194,106,.12)}
+  .choice.wrong{border-color: rgba(255,92,119,.7); background:rgba(255,92,119,.10)}
+  .teacherOnly{display:none}
+  .teacher .teacherOnly{display:block}
+  .teacher .studentOnly{display:none}
+  details{
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    padding:10px 12px;
+    background:rgba(255,255,255,.03);
+  }
+  summary{cursor:pointer; font-weight:900; color:var(--text)}
+  .footer{color:var(--muted); font-size:12px; margin-top:12px}
+  code.inline{font-family:var(--mono); font-size:12px; background:rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; border:1px solid rgba(255,255,255,.10);}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="titleRow">
+      <div class="brand">
+        <div class="pill">Y10</div>
+        <div>
+          <h1>OCR J277 – Quick Programming Revision</h1>
+          <div class="sub">End of term • 20–25 minutes • Fundamentals → Selection → Iteration → Arrays</div>
+        </div>
+      </div>
+      <div class="controls">
+        <label class="toggle" title="Show answers + teacher notes">
+          <input id="teacherMode" type="checkbox"/>
+          Teacher mode
+        </label>
+        <button id="btnReset" title="Reset progress">Reset</button>
+        <button id="btnPrint" title="Print / save as PDF">Print</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <nav>
+      <div class="navTitle">
+        <h2>Path</h2>
+        <span class="badge" id="progressBadge">0/8</span>
+      </div>
+      <div class="navList" id="navList"></div>
+      <div class="divider"></div>
+      <div class="small">
+        Student target: finish sections 1–6. <br/>
+        Stretch: sections 7–8.
+      </div>
+    </nav>
+
+    <div id="content"></div>
+  </div>
+
+  <div class="footer">
+    Single offline HTML • Works in Chrome/Edge • Save your score at the end (screenshot).
+  </div>
+</main>
+
+<script>
+const SECTIONS = [
+  { id:"start",  title:"1) Warm-up: 60 seconds", icon:"🔥" },
+  { id:"fund",   title:"2) Data types + casting", icon:"🔤" },
+  { id:"ops",    title:"3) Operators: MOD/DIV + precedence", icon:"🧮" },
+  { id:"select", title:"4) IF + Boolean logic", icon:"🎯" },
+  { id:"loops",  title:"5) Loops: FOR vs WHILE", icon:"🔁" },
+  { id:"arrays", title:"6) Arrays: index + length + loop", icon:"🧺" },
+  { id:"search", title:"7) Linear search (stop early)", icon:"🔎" },
+  { id:"twoD",   title:"8) 2D arrays (grid totals)", icon:"🧊" },
+];
+
+const state = {
+  done: new Set(),
+  teacher:false,
+  current:"start",
+  score: {correct:0, total:0}
+};
+
+function $(sel, root=document){ return root.querySelector(sel); }
+function el(tag, attrs={}, ...children){
+  const n = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(k==="class") n.className=v;
+    else if(k==="html") n.innerHTML=v;
+    else if(k.startsWith("on") && typeof v==="function") n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k,v);
+  });
+  for(const c of children){
+    if(c==null) continue;
+    n.appendChild(typeof c==="string" ? document.createTextNode(c) : c);
+  }
+  return n;
+}
+function sectionShell(kicker, title, body){
+  return el("section",{class:"card"},
+    el("div",{class:"kicker"}, kicker),
+    el("h3",{}, title),
+    body
+  );
+}
+function updateProgress(){ $("#progressBadge").textContent = `${state.done.size}/${SECTIONS.length}`; }
+function renderNav(){
+  const nav = $("#navList");
+  nav.innerHTML="";
+  SECTIONS.forEach(s=>{
+    nav.appendChild(el("div",{class:"navItem"+(state.current===s.id?" active":""), onclick:()=>go(s.id)},
+      el("div",{class:"dot"}), el("div",{}, `${s.icon} ${s.title}`)
+    ));
+  });
+}
+function go(id){
+  state.current=id;
+  renderNav();
+  renderSection();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function setDone(id){ state.done.add(id); updateProgress(); }
+
+function addScore(ok){
+  state.score.total += 1;
+  if(ok) state.score.correct += 1;
+  const s = $("#scoreBadge");
+  if(s) s.textContent = `${state.score.correct}/${state.score.total}`;
+}
+
+function mcq(id, question, choices, correctIndex, explanation){
+  const host = el("div",{class:"q", id:id},
+    el("div",{class:"qTitle"}, question),
+    el("div",{class:"choices"}, ...choices.map((c,i)=>el("div",{class:"choice", onclick:()=>{
+      if(host.getAttribute("data-answered")==="1") return;
+      host.setAttribute("data-answered","1");
+      const items = host.querySelectorAll(".choice");
+      items.forEach(x=>x.classList.remove("correct","wrong"));
+      const ok = (i===correctIndex);
+      items[i].classList.add(ok?"correct":"wrong");
+      items[correctIndex].classList.add("correct");
+      host.querySelector(".log").textContent = (ok?"✅ Correct. ":"❌ Not quite. ") + explanation;
+      addScore(ok);
+    }}, c)) ),
+    el("div",{class:"log"}, "Choose an answer…")
+  );
+  return host;
+}
+
+function codePredict(id, code, question, expected, explanation){
+  const inId = id+"_in", outId=id+"_out";
+  return el("div",{class:"q", id:id},
+    el("div",{class:"qTitle"}, question),
+    el("div",{class:"panel"},
+      el("div",{class:"small"},"Code:"),
+      el("div",{class:"log"}, code)
+    ),
+    el("input",{id:inId, type:"text", placeholder:"Your output (single line). Example: 63"}),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{
+        const a = ($("#"+inId).value||"").trim();
+        const ok = (a===expected);
+        $("#"+outId).textContent = ok ? "✅ Correct. "+explanation : `❌ Not quite. Correct output: ${expected}. `+explanation;
+        if($("#"+id).getAttribute("data-answered")!=="1"){
+          $("#"+id).setAttribute("data-answered","1");
+          addScore(ok);
+        }
+      }},"Check")
+    ),
+    el("div",{class:"log", id:outId},"")
+  );
+}
+
+/* Sections */
+function renderStart(){
+  const body = el("div",{},
+    el("p",{}, "Quick recap of: data types/casting, operators, IF + Boolean logic, loops, arrays and 2D arrays."),
+    el("div",{class:"row"},
+      el("div",{class:"col panel"},
+        el("h4",{},"Rules"),
+        el("p",{class:"hint"},"Aim to finish in 20–25 minutes. Don’t overthink—go with your first sensible answer."),
+        el("div",{class:"divider"}),
+        el("div",{}, "Score: ", el("span",{class:"badge", id:"scoreBadge"}, "0/0")),
+        el("div",{class:"small", style:"margin-top:8px"}, "Tip: If you get stuck, move on and come back.")
+      ),
+      el("div",{class:"col panel"},
+        el("h4",{},"60‑second warm‑up"),
+        mcq("mc_warm1",
+          "Which three control structures make up most programs?",
+          ["Sequence, selection, iteration", "Variables, constants, casting", "Input, output, print"],
+          0,
+          "Sequence = do in order. Selection = choose a path. Iteration = repeat."
+        ),
+        mcq("mc_warm2",
+          "Which of these is a Boolean operator?",
+          ["DIV", "AND", "substring"],
+          1,
+          "AND/OR/NOT combine or flip Boolean expressions."
+        )
+      )
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("start"); alert("Section 1 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("1/8", "Warm‑up", body);
+}
+
+function renderFund(){
+  const body = el("div",{},
+    el("p",{}, "Data types: integer, real/float, Boolean, character, string. Inputs arrive as strings, so we often cast with int(), float(), str()."),
+    mcq("mc_dt1","What is the data type of 20.0 ?", ["integer","float/real","string"], 1, "A number with a decimal point is real/float."),
+    mcq("mc_dt2","What is the data type of \"17\" ?", ["integer","float/real","string"], 2, "Quotes mean it’s a string."),
+    codePredict("cp_concat",
+      "x = \"6\" + \"3\"\nprint(x)",
+      "Predict the output:",
+      "63",
+      "String + means concatenation (join)."),
+    mcq("mc_cast",
+      "You want to calculate tickets * 5. Which line correctly gets an integer from the user?",
+      ["tickets = input()","tickets = int(input())","tickets = str(input())"],
+      1,
+      "input() returns a string; int(...) converts it to an integer."
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("fund"); alert("Section 2 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("2/8", "Data types + casting", body);
+}
+
+function renderOps(){
+  const body = el("div",{},
+    el("p",{}, "Integer operators: DIV (quotient) and MOD (remainder). BIDMAS helps with precedence."),
+    mcq("mc_divmod1","31 DIV 7 gives…", ["4","3","4 remainder 3"], 0, "DIV is integer division (quotient)."),
+    mcq("mc_divmod2","31 MOD 7 gives…", ["4","3","7"], 1, "MOD is remainder."),
+    mcq("mc_bidmas","In 7 * 3 + 10 / 2, which happens first?", ["7*3","10/2","+ happens first"], 0, "Multiplication/division happen before addition."),
+    el("div",{class:"q", id:"op_q"},
+      el("div",{class:"qTitle"}, "Compute: y = 7 * 3 + 10 / 2"),
+      el("input",{id:"op_ans", type:"text", placeholder:"26 or 26.0"}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const v = ($("#op_ans").value||"").trim();
+          const ok = (v==="26" || v==="26.0");
+          $("#op_out").textContent = ok ? "✅ Correct: 7*3=21 and 10/2=5 → 26." : "❌ Not quite. Correct is 26 (or 26.0).";
+          if($("#op_q").getAttribute("data-answered")!=="1"){
+            $("#op_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check")
+      ),
+      el("div",{class:"log", id:"op_out"},"")
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("ops"); alert("Section 3 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("3/8", "Operators + precedence", body);
+}
+
+function renderSelection(){
+  const body = el("div",{},
+    el("p",{}, "Selection uses if / elif / else with Boolean expressions. Comparisons: ==  !=  >  <  >=  <="),
+    mcq("mc_cmp","Why do we use == for equality (in many languages)?", ["Because = is assignment", "Because == is faster", "Because Python demands it"], 0, "= sets a value; == compares."),
+    mcq("mc_bool","(82 >= 80) OR (70 >= 80) is…", ["True","False"], 0, "OR is true if either condition is true."),
+    mcq("mc_not","NOT(0 > 50) AND (75 > 50) is…", ["True","False"], 0, "NOT flips; then AND needs both true."),
+    el("div",{class:"q", id:"if_q"},
+      el("div",{class:"qTitle"}, "Write a simple IF in Python (roughly)"),
+      el("div",{class:"hint"},"Condition: if hours > 168 print \"That’s impossible\" else calculate totalPay."),
+      el("textarea",{id:"if_box", placeholder:"Type your IF/ELSE…"}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const t = ($("#if_box").value||"").toLowerCase();
+          const ok = t.includes("if") && t.includes("hours") && t.includes("168") && t.includes("else") && t.includes("print");
+          $("#if_out").textContent = ok ? "✅ Nice. Key marks: correct condition + IF/ELSE + output." :
+            "⚠️ You want: if hours > 168: print(...) else: totalPay = hours * hourlyRate; print(totalPay)";
+          if($("#if_q").getAttribute("data-answered")!=="1"){
+            $("#if_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check (quick)")
+      ),
+      el("div",{class:"log", id:"if_out"},"")
+    ),
+    el("details",{class:"teacherOnly"},
+      el("summary",{},"Model answer"),
+      el("div",{class:"log"},
+`hourlyRate = 15.50
+hours = int(input("Enter hours worked this week: "))
+if hours > 168:
+    print("That’s impossible")
+else:
+    totalPay = hours * hourlyRate
+    print(totalPay)`
+      )
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("select"); alert("Section 4 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("4/8", "IF + Boolean logic", body);
+}
+
+function renderLoops(){
+  const body = el("div",{},
+    el("p",{}, "Iteration = repetition. FOR = fixed repeats. WHILE = repeat while a condition is true."),
+    mcq("mc_loop1","Best loop to count from 1 to 100?", ["WHILE","FOR"], 1, "FOR is for known repeats."),
+    mcq("mc_loop2","Best loop to keep asking for a password until correct?", ["WHILE","FOR"], 0, "WHILE repeats while wrong."),
+    mcq("mc_inf","If the condition never becomes false, you get…", ["Nested loop","Infinite loop","A syntax error"], 1, "Infinite loop = no exit."),
+    el("div",{class:"q", id:"loop_q"},
+      el("div",{class:"qTitle"}, "Mini task: what variable holds the running total?"),
+      el("div",{class:"hint"},"In many examples: total = total + dailyTemperature"),
+      el("input",{id:"loop_ans", type:"text", placeholder:"total / sum"}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const a = ($("#loop_ans").value||"").trim().toLowerCase();
+          const ok = ["total","sum"].includes(a);
+          $("#loop_out").textContent = ok ? "✅ Yep. Running total then divide at the end." : "⚠️ Usually a variable called total (or sum).";
+          if($("#loop_q").getAttribute("data-answered")!=="1"){
+            $("#loop_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check")
+      ),
+      el("div",{class:"log", id:"loop_out"},"")
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("loops"); alert("Section 5 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("5/8", "Loops: FOR vs WHILE", body);
+}
+
+function renderArrays(){
+  const body = el("div",{},
+    el("p",{}, "Arrays/lists store many items under one identifier. Indexes start at 0. Last index = length - 1."),
+    mcq("mc_arr1","If a list has length 10, the last index is…", ["10","9","1"], 1, "Start at 0 → last is 9."),
+    mcq("mc_arr2","Which prints every item in a list called usernames?", 
+        ["for i in range(len(usernames)): print(usernames[i])",
+         "for u in usernames: print(u)",
+         "Both A and B"],
+        2,
+        "Both are valid Python."
+    ),
+    el("div",{class:"q", id:"arr_q"},
+      el("div",{class:"qTitle"}, "Write two lines of Python: make a list and print index 0"),
+      el("textarea",{id:"arr_code", placeholder:'usernames = ["Ava","Ben","Cara"]\nprint(usernames[0])'}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const t = ($("#arr_code").value||"").toLowerCase();
+          const ok = t.includes("=") && t.includes("[") && t.includes("]") && t.includes("print") && t.includes("[0]");
+          $("#arr_out").textContent = ok ? "✅ Looks good." : "⚠️ You need a list with [ ] and print(usernames[0]).";
+          if($("#arr_q").getAttribute("data-answered")!=="1"){
+            $("#arr_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check")
+      ),
+      el("div",{class:"log", id:"arr_out"},"")
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("arrays"); alert("Section 6 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("6/8", "Arrays: index + length + loop", body);
+}
+
+function renderSearch(){
+  const body = el("div",{},
+    el("p",{}, "Linear search checks items one-by-one. You can stop early using a WHILE loop and a found flag."),
+    mcq("mc_ls","A linear search checks…", ["Random items", "Each item in order", "Only the last item"], 1, "Linear = one-by-one."),
+    el("div",{class:"q", id:"ls_q"},
+      el("div",{class:"qTitle"}, "How many checks to find Brighton in [Margate, Swansea, Brighton, ...]?"),
+      el("input",{id:"ls_ans", type:"number", min:"1", max:"10", value:"3"}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const n = parseInt($("#ls_ans").value,10);
+          const ok = (n===3);
+          $("#ls_out").textContent = ok ? "✅ 3 checks (Margate, Swansea, Brighton)." : "⚠️ It’s the 3rd item, so 3 checks.";
+          if($("#ls_q").getAttribute("data-answered")!=="1"){
+            $("#ls_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check")
+      ),
+      el("div",{class:"log", id:"ls_out"},"")
+    ),
+    el("details",{class:"teacherOnly"},
+      el("summary",{},"Model pseudocode (stop early)"),
+      el("div",{class:"log"},
+`found = False
+i = 0
+while NOT found AND i < resort.length
+    if townName == resort[i] then
+        found = True
+    endif
+    i = i + 1
+endwhile`
+      )
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("search"); alert("Section 7 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("7/8", "Linear search (stretch)", body);
+}
+
+function renderTwoD(){
+  const marks = [
+    [12,14,8,7,17],
+    [6,8,5,3,13],
+    [16,15,9,10,18]
+  ];
+  const body = el("div",{},
+    el("p",{}, "2D arrays are grids. Access with mark[row][col]."),
+    mcq("mc_2d","In the mark grid, mark[1][0] is…", ["12","6","16"], 1, "Row 1 (Student2), col 0 = 6."),
+    el("div",{class:"q", id:"t2d_q"},
+      el("div",{class:"qTitle"}, "Total for Student1 (12, 14, 8, 7, 17) is…"),
+      el("input",{id:"t2d_ans", type:"number", value:"0"}),
+      el("div",{class:"btnRow"},
+        el("button",{onclick:()=>{
+          const n = parseInt($("#t2d_ans").value,10);
+          const total = marks[0].reduce((a,b)=>a+b,0); // 58
+          const ok = (n===total);
+          $("#t2d_out").textContent = ok ? "✅ Correct: 58." : "⚠️ Correct total is 58.";
+          if($("#t2d_q").getAttribute("data-answered")!=="1"){
+            $("#t2d_q").setAttribute("data-answered","1");
+            addScore(ok);
+          }
+        }},"Check")
+      ),
+      el("div",{class:"log", id:"t2d_out"},"")
+    ),
+    el("details",{class:"teacherOnly"},
+      el("summary",{},"Model nested loop (totals)"),
+      el("div",{class:"log"},
+`for s = 0 to 2
+    studentTotal = 0
+    for m = 0 to 4
+        studentTotal = studentTotal + mark[s][m]
+    next m
+    print(studentTotal)
+next s`
+      )
+    ),
+    el("div",{class:"btnRow"},
+      el("button",{onclick:()=>{ setDone("twoD"); alert("Section 8 complete ✅"); }},"Mark section complete")
+    )
+  );
+  return sectionShell("8/8", "2D arrays (stretch)", body);
+}
+
+function renderSection(){
+  const host = $("#content");
+  host.innerHTML="";
+  const map = {
+    start: renderStart,
+    fund: renderFund,
+    ops: renderOps,
+    select: renderSelection,
+    loops: renderLoops,
+    arrays: renderArrays,
+    search: renderSearch,
+    twoD: renderTwoD
+  };
+  host.appendChild(map[state.current]());
+  document.body.classList.toggle("teacher", state.teacher);
+}
+
+function resetAll(){
+  state.done = new Set();
+  state.current = "start";
+  state.score = {correct:0,total:0};
+  updateProgress(); renderNav(); renderSection();
+}
+
+function init(){
+  renderNav(); renderSection(); updateProgress();
+  $("#teacherMode").addEventListener("change",(e)=>{
+    state.teacher = e.target.checked;
+    document.body.classList.toggle("teacher", state.teacher);
+  });
+  $("#btnReset").addEventListener("click", ()=>{ if(confirm("Reset progress and score?")) resetAll(); });
+  $("#btnPrint").addEventListener("click", ()=>window.print());
+}
+init();
+</script>
+</body>
+</html>
